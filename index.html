@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <!-- Adicione o link da sua imagem de ícone abaixo -->
   <link rel="icon" type="image/png" href="COLE_O_LINK_DA_SUA_IMAGEM_AQUI.png">
   <title>Dashboard XAU M15</title>
   <style>
@@ -23,13 +22,19 @@
 
     * { box-sizing: border-box; }
 
-    /* TRAVANDO A LARGURA PARA NÃO VAZAR NO CELULAR */
-    body {
-      margin: 0; padding: 0; 
+    /* Trava absoluta para o tamanho da tela */
+    html, body {
+      margin: 0; padding: 0;
+      width: 100%; max-width: 100vw;
+      overflow-x: hidden;
+      background-color: var(--bg-color);
+      color: var(--text-main);
       font-family: 'JetBrains Mono', monospace;
-      background-color: var(--bg-color); color: var(--text-main);
+    }
+
+    .app-wrapper {
       display: flex; flex-direction: column; align-items: center;
-      width: 100%; max-width: 100vw; overflow-x: hidden;
+      width: 100%; overflow-x: hidden;
     }
 
     header {
@@ -41,42 +46,47 @@
     header h1 span { color: var(--accent); }
     header p { color: var(--text-muted); margin-top: 0.5rem; font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px; }
 
+    /* Alinhamento perfeito entre as sessões superiores e inferiores */
+    .summary-container, .container {
+      width: 92%; max-width: 1200px; margin: 2rem auto;
+    }
+
     .summary-container {
-      max-width: 1200px; width: 95%; margin: 2rem auto 0;
-      display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 0;
+    }
+
+    .container {
+      display: grid; grid-template-columns: 360px 1fr; gap: 2rem; align-items: stretch;
     }
 
     .summary-card {
       background-color: var(--card-bg); border: 1px solid var(--border); border-left: 4px solid var(--accent);
       border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: center;
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      min-width: 0; /* Trava de vazamento */
     }
     .summary-card h3 { margin: 0 0 0.5rem 0; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; }
     .summary-card p { margin: 0; font-size: 2rem; font-weight: 800; color: var(--text-main); }
     
     .profit-text { color: var(--profit) !important; }
 
-    .container {
-      max-width: 1200px; width: 95%; margin: 2rem auto;
-      display: grid; grid-template-columns: 360px 1fr; gap: 2rem;
-      align-items: stretch; 
-    }
-
     .card { 
       background-color: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; 
       padding: 1.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
       display: flex; flex-direction: column; width: 100%;
+      min-width: 0; /* TRAVA MÁGICA: Impede o card de expandir além da tela */
     }
 
     .card h2 { margin-top: 0; font-size: 1.2rem; color: var(--text-main); border-left: 4px solid var(--accent); padding-left: 0.75rem; margin-bottom: 1.5rem; }
 
-    form#formulario { display: flex; flex-direction: column; justify-content: space-between; flex: 1; }
+    form#formulario { display: flex; flex-direction: column; justify-content: space-between; flex: 1; min-width: 0; }
 
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.2rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.2rem; min-width: 0; }
+    .form-group { min-width: 0; } /* Trava o vazamento de inputs */
     .form-group label { display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; }
     
     .form-group input, .form-group select { 
-      width: 100%; padding: 0.9rem; background-color: var(--bg-color); border: 1px solid var(--border); 
+      width: 100%; max-width: 100%; padding: 0.9rem; background-color: var(--bg-color); border: 1px solid var(--border); 
       border-radius: 8px; color: var(--text-main); font-family: 'JetBrains Mono', monospace;
     }
     .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--accent); }
@@ -91,18 +101,17 @@
     /* TABELA RESPONSIVA (SCROLL HORIZONTAL) */
     .table-wrapper {
       max-height: 310px; 
-      overflow-y: auto;
-      overflow-x: auto; /* Permite rolar para os lados */
-      -webkit-overflow-scrolling: touch; /* Suavidade no iOS */
+      overflow-y: auto; overflow-x: auto; 
+      -webkit-overflow-scrolling: touch; 
       border-radius: 0 0 8px 8px;
-      width: 100%;
+      width: 100%; min-width: 0; /* Trava de vazamento da tabela */
     }
     
     .table-wrapper::-webkit-scrollbar { width: 8px; height: 8px; }
     .table-wrapper::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 4px; }
     .table-wrapper::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 
-    table { width: 100%; border-collapse: collapse; white-space: nowrap; /* Impede a quebra de linha forçada */ }
+    table { width: 100%; border-collapse: collapse; white-space: nowrap; }
     th, td { padding: 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.95rem; }
     
     th { color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; position: sticky; top: 0; background-color: var(--card-bg); z-index: 10; }
@@ -113,27 +122,22 @@
     .badge-venda { background: rgba(248, 113, 113, 0.15); color: var(--loss); }
     .badge-op { background: rgba(255, 255, 255, 0.1); color: var(--text-muted); }
 
-    .btn-excluir { background-color: var(--loss); color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; cursor: pointer; opacity: 1; /* Visível no mobile por padrão */ font-family: 'JetBrains Mono', monospace; }
+    .btn-excluir { background-color: var(--loss); color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; cursor: pointer; opacity: 1; font-family: 'JetBrains Mono', monospace; }
     
     /* REGRAS ESPECÍFICAS PARA CELULAR */
     @media (max-width: 768px) {
+      .summary-container, .container { width: 92%; }
       .container { grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 2rem; }
-      
       .summary-container { grid-template-columns: 1fr 1fr; gap: 1rem; }
-      .summary-card { padding: 1rem; }
-      .summary-card p { font-size: 1.4rem; }
       
-      /* Empilha os inputs para facilitar o toque */
+      .summary-card { padding: 1.2rem 1rem; }
+      .summary-card p { font-size: 1.3rem; }
+      
       .form-row { grid-template-columns: 1fr; margin-bottom: 0; gap: 0; }
       .form-group { margin-bottom: 1rem; }
       
-      .card { padding: 1rem; }
-      
-      /* Torna a área da tabela um pouco maior no celular */
+      .card { padding: 1.2rem; }
       .table-wrapper { max-height: 400px; }
-      
-      /* Ocultar o botão Excluir por padrão apenas no desktop, 
-         no mobile ele precisa ficar sempre visível porque não tem "hover" de mouse */
     }
 
     @media (min-width: 769px) {
@@ -145,6 +149,7 @@
 </head>
 <body>
 
+<div class="app-wrapper">
   <header>
     <h1>XAUUSD<span> M15</span></h1>
     <p>Diário de Operações • Dashboard</p>
@@ -193,6 +198,7 @@
       </div>
     </div>
   </div>
+</div>
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbyHEWMSl2jkLA1EGk79GbuDgBUgFWcM8ukVuphxy0S-wCqS3thCwN43184uerca8Z5i/exec';
