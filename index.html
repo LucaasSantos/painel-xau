@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link rel="icon" type="image/png" href="COLE_O_LINK_DA_SUA_IMAGEM_AQUI.png">
   <title>Dashboard XAU M15</title>
+  
+  <!-- Importando a Biblioteca Chart.js para o Gráfico -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <style>
     @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap');
 
@@ -22,7 +26,6 @@
 
     * { box-sizing: border-box; }
 
-    /* Trava absoluta para o tamanho da tela */
     html, body {
       margin: 0; padding: 0;
       width: 100%; max-width: 100vw;
@@ -47,7 +50,7 @@
     header h1 span { color: var(--accent); }
     header p { color: var(--text-muted); margin-top: 0.6rem; font-weight: 600; text-transform: uppercase; font-size: clamp(0.7rem, 2.6vw, 0.8rem); letter-spacing: 2px; }
 
-    .summary-container, .container {
+    .summary-container, .container, .chart-container {
       width: 92%; max-width: 1200px; margin: 2rem auto;
     }
 
@@ -55,9 +58,14 @@
       display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 0;
     }
 
+    /* Ajuste de Grid para Sessão Principal */
     .container {
-      display: grid; grid-template-columns: 360px 1fr; gap: 2rem; align-items: stretch;
+      display: grid; grid-template-columns: 360px 1fr; gap: 2rem; align-items: stretch; margin-top: 2rem;
     }
+
+    /* Container do Gráfico que ocupa a largura total */
+    .chart-container { margin-top: 2rem; margin-bottom: 0; }
+    .chart-box { height: 260px; width: 100%; position: relative; }
 
     .summary-card {
       background-color: var(--card-bg); border: 1px solid var(--border); border-left: 4px solid var(--accent);
@@ -83,12 +91,7 @@
 
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.2rem; min-width: 0; width: 100%; }
     
-    .form-group { 
-      min-width: 0; 
-      width: 100%; 
-      overflow: hidden; /* Corta vazamentos no mobile */
-    } 
-    
+    .form-group { min-width: 0; width: 100%; overflow: hidden; } 
     .form-group label { display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; }
 
     .form-group input, .form-group select {
@@ -98,14 +101,9 @@
     }
     .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--accent); }
 
-    /* Forçando a correção do Date Picker no iOS */
     .form-group input[type="date"] {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 100%;
-      max-width: 100%;
-      box-sizing: border-box;
-      color-scheme: dark; 
+      -webkit-appearance: none; appearance: none;
+      width: 100%; max-width: 100%; box-sizing: border-box; color-scheme: dark; 
     }
     .form-group input[type="date"]::-webkit-date-and-time-value { text-align: left; }
     .form-group input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.6); cursor: pointer; }
@@ -140,29 +138,19 @@
 
     .btn-excluir { background-color: var(--loss); color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; cursor: pointer; opacity: 1; font-family: 'JetBrains Mono', monospace; }
 
-    /* REGRAS ESPECÍFICAS PARA CELULAR */
     @media (max-width: 768px) {
       header { padding: 1.75rem 0 1.5rem; }
-
-      .summary-container, .container { width: 92%; }
+      .summary-container, .container, .chart-container { width: 92%; }
       .container { grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 2rem; }
       .summary-container { grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
-
       .summary-card { padding: 1.2rem 1rem; }
       .summary-card h3 { font-size: 0.72rem; }
       .summary-card p { font-size: 1.3rem; }
-
       .form-row { grid-template-columns: 1fr; margin-bottom: 0; gap: 0; }
       .form-group { margin-bottom: 1rem; }
-
-      /* Reduzimos o padding lateral dos inputs no celular para acomodar a data do iOS */
-      .form-group input, .form-group select {
-        padding: 0.9rem 0.5rem; 
-      }
-
+      .form-group input, .form-group select { padding: 0.9rem 0.5rem; }
       .card { padding: 1.2rem; }
       .table-wrapper { max-height: 400px; }
-
       .btn-excluir { padding: 8px 10px; } 
     }
 
@@ -189,6 +177,16 @@
     <div class="summary-card">
       <h3>Capital Atual</h3>
       <p id="valCapitalAtual">Carregando...</p>
+    </div>
+  </div>
+
+  <!-- NOVO BLOCO: GRÁFICO -->
+  <div class="chart-container">
+    <div class="card">
+      <h2>Performance (Últimas Operações)</h2>
+      <div class="chart-box">
+        <canvas id="graficoPerformance"></canvas>
+      </div>
     </div>
   </div>
 
@@ -229,6 +227,9 @@
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbyHEWMSl2jkLA1EGk79GbuDgBUgFWcM8ukVuphxy0S-wCqS3thCwN43184uerca8Z5i/exec';
     document.getElementById('inputData').valueAsDate = new Date();
+    
+    // Variável para guardar o gráfico
+    let meuGrafico = null;
 
     async function carregarDashboard() {
       try {
@@ -239,17 +240,20 @@
         const capitalAtual = parseFloat(json.capitalAtual) || 0;
 
         document.getElementById('valCapitalInicial').innerText = `$ ${capitalInicial.toFixed(2)}`;
-
         const elCapitalAtual = document.getElementById('valCapitalAtual');
         elCapitalAtual.innerText = `$ ${capitalAtual.toFixed(2)}`;
 
         if (capitalAtual > capitalInicial) elCapitalAtual.classList.add('profit-text');
         else elCapitalAtual.classList.remove('profit-text');
 
+        // PREENCHENDO A TABELA
         const corpoTabela = document.getElementById('tabelaDados');
         corpoTabela.innerHTML = '';
+        
+        // Cópia dos registros para não afetar o array original
+        const registrosInvertidos = [...json.registros].reverse();
 
-        json.registros.reverse().forEach(linha => {
+        registrosInvertidos.forEach(linha => {
           const op = linha.OP || '-';
           const operacao = linha.OPERAÇÃO || '---';
           const lote = linha.LOTE || 0;
@@ -280,6 +284,65 @@
           `;
           corpoTabela.appendChild(tr);
         });
+
+        // ===== LÓGICA DO GRÁFICO =====
+        // Pega as últimas 20 operações para o gráfico (na ordem original de inserção, da esquerda para a direita)
+        const registrosGrafico = json.registros.slice(-20);
+        
+        const labelsGrafico = registrosGrafico.map(r => `OP #${r.OP}`);
+        const dadosGrafico = registrosGrafico.map(r => parseFloat(r.RESULTADO) || 0);
+        
+        // Cores: Verde translúcido para lucro, vermelho translúcido para perda
+        const coresFundo = dadosGrafico.map(valor => valor >= 0 ? 'rgba(74, 222, 128, 0.7)' : 'rgba(248, 113, 113, 0.7)');
+        const coresBorda = dadosGrafico.map(valor => valor >= 0 ? 'rgba(74, 222, 128, 1)' : 'rgba(248, 113, 113, 1)');
+
+        if (meuGrafico) {
+          // Atualiza o gráfico se ele já existir
+          meuGrafico.data.labels = labelsGrafico;
+          meuGrafico.data.datasets[0].data = dadosGrafico;
+          meuGrafico.data.datasets[0].backgroundColor = coresFundo;
+          meuGrafico.data.datasets[0].borderColor = coresBorda;
+          meuGrafico.update();
+        } else {
+          // Cria o gráfico na primeira vez
+          const ctx = document.getElementById('graficoPerformance').getContext('2d');
+          meuGrafico = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: labelsGrafico,
+              datasets: [{
+                label: 'Resultado (R$)',
+                data: dadosGrafico,
+                backgroundColor: coresFundo,
+                borderColor: coresBorda,
+                borderWidth: 1,
+                borderRadius: 4
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false },
+                tooltip: { 
+                  titleFont: { family: "'JetBrains Mono', monospace" }, 
+                  bodyFont: { family: "'JetBrains Mono', monospace" }
+                }
+              },
+              scales: {
+                y: {
+                  grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                  ticks: { color: '#94a3b8', font: { family: "'JetBrains Mono', monospace" } }
+                },
+                x: {
+                  grid: { display: false },
+                  ticks: { color: '#94a3b8', font: { family: "'JetBrains Mono', monospace" } }
+                }
+              }
+            }
+          });
+        }
+
       } catch (erro) {
         document.getElementById('tabelaDados').innerHTML = '<tr><td colspan="7" style="text-align:center;">Erro ao carregar dados.</td></tr>';
       }
