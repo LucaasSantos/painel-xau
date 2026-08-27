@@ -6,7 +6,6 @@
   <link rel="icon" type="image/png" href="COLE_O_LINK_DA_SUA_IMAGEM_AQUI.png">
   <title>Dashboard XAU M15</title>
   
-  <!-- Importando a Biblioteca Chart.js para o Gráfico -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
@@ -58,12 +57,10 @@
       display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 0;
     }
 
-    /* Ajuste de Grid para Sessão Principal */
     .container {
       display: grid; grid-template-columns: 360px 1fr; gap: 2rem; align-items: stretch; margin-top: 2rem;
     }
 
-    /* Container do Gráfico que ocupa a largura total */
     .chart-container { margin-top: 2rem; margin-bottom: 0; }
     .chart-box { height: 260px; width: 100%; position: relative; }
 
@@ -180,7 +177,6 @@
     </div>
   </div>
 
-  <!-- NOVO BLOCO: GRÁFICO -->
   <div class="chart-container">
     <div class="card">
       <h2>Performance (Últimas Operações)</h2>
@@ -228,7 +224,6 @@
     const API_URL = 'https://script.google.com/macros/s/AKfycbyHEWMSl2jkLA1EGk79GbuDgBUgFWcM8ukVuphxy0S-wCqS3thCwN43184uerca8Z5i/exec';
     document.getElementById('inputData').valueAsDate = new Date();
     
-    // Variável para guardar o gráfico
     let meuGrafico = null;
 
     async function carregarDashboard() {
@@ -246,11 +241,9 @@
         if (capitalAtual > capitalInicial) elCapitalAtual.classList.add('profit-text');
         else elCapitalAtual.classList.remove('profit-text');
 
-        // PREENCHENDO A TABELA
         const corpoTabela = document.getElementById('tabelaDados');
         corpoTabela.innerHTML = '';
         
-        // Cópia dos registros para não afetar o array original
         const registrosInvertidos = [...json.registros].reverse();
 
         registrosInvertidos.forEach(linha => {
@@ -285,26 +278,20 @@
           corpoTabela.appendChild(tr);
         });
 
-        // ===== LÓGICA DO GRÁFICO =====
-        // Pega as últimas 20 operações para o gráfico (na ordem original de inserção, da esquerda para a direita)
         const registrosGrafico = json.registros.slice(-20);
-        
         const labelsGrafico = registrosGrafico.map(r => `OP #${r.OP}`);
         const dadosGrafico = registrosGrafico.map(r => parseFloat(r.RESULTADO) || 0);
         
-        // Cores: Verde translúcido para lucro, vermelho translúcido para perda
         const coresFundo = dadosGrafico.map(valor => valor >= 0 ? 'rgba(74, 222, 128, 0.7)' : 'rgba(248, 113, 113, 0.7)');
         const coresBorda = dadosGrafico.map(valor => valor >= 0 ? 'rgba(74, 222, 128, 1)' : 'rgba(248, 113, 113, 1)');
 
         if (meuGrafico) {
-          // Atualiza o gráfico se ele já existir
           meuGrafico.data.labels = labelsGrafico;
           meuGrafico.data.datasets[0].data = dadosGrafico;
           meuGrafico.data.datasets[0].backgroundColor = coresFundo;
           meuGrafico.data.datasets[0].borderColor = coresBorda;
           meuGrafico.update();
         } else {
-          // Cria o gráfico na primeira vez
           const ctx = document.getElementById('graficoPerformance').getContext('2d');
           meuGrafico = new Chart(ctx, {
             type: 'bar',
@@ -326,13 +313,26 @@
                 legend: { display: false },
                 tooltip: { 
                   titleFont: { family: "'JetBrains Mono', monospace" }, 
-                  bodyFont: { family: "'JetBrains Mono', monospace" }
+                  bodyFont: { family: "'JetBrains Mono', monospace" },
+                  // NOVO: Formata o balão para exibir 2 casas decimais
+                  callbacks: {
+                    label: function(context) {
+                      return 'Resultado (R$): ' + context.parsed.y.toFixed(2);
+                    }
+                  }
                 }
               },
               scales: {
                 y: {
                   grid: { color: 'rgba(255, 255, 255, 0.05)' },
-                  ticks: { color: '#94a3b8', font: { family: "'JetBrains Mono', monospace" } }
+                  ticks: { 
+                    color: '#94a3b8', 
+                    font: { family: "'JetBrains Mono', monospace" },
+                    // NOVO: Garante 2 casas no eixo vertical do gráfico também
+                    callback: function(value) {
+                      return value.toFixed(2);
+                    }
+                  }
                 },
                 x: {
                   grid: { display: false },
