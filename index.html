@@ -26,19 +26,12 @@
     * { box-sizing: border-box; }
 
     html, body {
-      margin: 0; padding: 0;
-      width: 100%; max-width: 100vw;
-      overflow-x: hidden;
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      font-family: 'JetBrains Mono', monospace;
-      -webkit-text-size-adjust: 100%;
+      margin: 0; padding: 0; width: 100%; max-width: 100vw; overflow-x: hidden;
+      background-color: var(--bg-color); color: var(--text-main);
+      font-family: 'JetBrains Mono', monospace; -webkit-text-size-adjust: 100%;
     }
 
-    .app-wrapper {
-      display: flex; flex-direction: column; align-items: center;
-      width: 100%; overflow-x: hidden;
-    }
+    .app-wrapper { display: flex; flex-direction: column; align-items: center; width: 100%; overflow-x: hidden; }
 
     header {
       width: 100%; padding: 2rem 0; text-align: center; border-bottom: 1px solid var(--border);
@@ -49,43 +42,40 @@
     header h1 span { color: var(--accent); }
     header p { color: var(--text-muted); margin-top: 0.6rem; font-weight: 600; text-transform: uppercase; font-size: clamp(0.7rem, 2.6vw, 0.8rem); letter-spacing: 2px; }
 
-    .summary-container, .container, .chart-container {
-      width: 92%; max-width: 1200px; margin: 2rem auto;
-    }
+    .summary-container, .container, .chart-container { width: 92%; max-width: 1200px; margin: 2rem auto; }
 
-    .summary-container {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 0;
-    }
+    /* Ajustado para 3 colunas (Capital Inicial, Atual, Winrate) */
+    .summary-container { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; margin-bottom: 0; }
 
-    .container {
-      display: grid; grid-template-columns: 360px 1fr; gap: 2rem; align-items: stretch; margin-top: 2rem;
-    }
-
+    .container { display: grid; grid-template-columns: 360px 1fr; gap: 2rem; align-items: stretch; margin-top: 2rem; }
     .chart-container { margin-top: 2rem; margin-bottom: 0; }
     .chart-box { height: 260px; width: 100%; position: relative; }
 
     .summary-card {
       background-color: var(--card-bg); border: 1px solid var(--border); border-left: 4px solid var(--accent);
       border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      min-width: 0;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3); min-width: 0;
     }
-    .summary-card h3 { margin: 0 0 0.5rem 0; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; }
+    .summary-card h3 { 
+      margin: 0 0 0.5rem 0; color: var(--text-muted); font-size: 0.85rem; 
+      text-transform: uppercase; display: flex; justify-content: space-between; align-items: center; 
+    }
     .summary-card p { margin: 0; font-size: 2rem; font-weight: 800; color: var(--text-main); }
-
     .profit-text { color: var(--profit) !important; }
+
+    /* Ícone de editar interativo */
+    .btn-editar { cursor: pointer; color: var(--text-muted); transition: color 0.2s; }
+    .btn-editar:hover { color: var(--accent); }
 
     .card {
       background-color: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
       padding: 1.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      display: flex; flex-direction: column; width: 100%;
-      min-width: 0; overflow: hidden;
+      display: flex; flex-direction: column; width: 100%; min-width: 0; overflow: hidden;
     }
 
     .card h2 { margin-top: 0; font-size: 1.2rem; color: var(--text-main); border-left: 4px solid var(--accent); padding-left: 0.75rem; margin-bottom: 1.5rem; }
 
     form#formulario { display: flex; flex-direction: column; justify-content: space-between; flex: 1; min-width: 0; width: 100%; }
-
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.2rem; min-width: 0; width: 100%; }
     
     .form-group { min-width: 0; width: 100%; overflow: hidden; } 
@@ -97,11 +87,7 @@
       font-family: 'JetBrains Mono', monospace; font-size: 1rem; box-sizing: border-box;
     }
     .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--accent); }
-
-    .form-group input[type="date"] {
-      -webkit-appearance: none; appearance: none;
-      width: 100%; max-width: 100%; box-sizing: border-box; color-scheme: dark; 
-    }
+    .form-group input[type="date"] { -webkit-appearance: none; appearance: none; width: 100%; max-width: 100%; box-sizing: border-box; color-scheme: dark; }
     .form-group input[type="date"]::-webkit-date-and-time-value { text-align: left; }
     .form-group input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.6); cursor: pointer; }
 
@@ -113,18 +99,14 @@
     button.btn-primario:hover { background-color: var(--accent-hover); transform: translateY(-2px); }
 
     .table-wrapper {
-      max-height: 310px; overflow-y: auto; overflow-x: auto;
-      -webkit-overflow-scrolling: touch; border-radius: 0 0 8px 8px;
-      width: 100%; min-width: 0; 
+      max-height: 310px; overflow-y: auto; overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 0 0 8px 8px; width: 100%; min-width: 0; 
     }
-
     .table-wrapper::-webkit-scrollbar { width: 8px; height: 8px; }
     .table-wrapper::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 4px; }
     .table-wrapper::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 
     table { width: 100%; border-collapse: collapse; white-space: nowrap; }
     th, td { padding: 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.95rem; }
-
     th { color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; position: sticky; top: 0; background-color: var(--card-bg); z-index: 10; }
     tr:hover { background-color: rgba(255,255,255,0.02); }
 
@@ -132,14 +114,17 @@
     .badge-compra { background: rgba(74, 222, 128, 0.15); color: var(--profit); }
     .badge-venda { background: rgba(248, 113, 113, 0.15); color: var(--loss); }
     .badge-op { background: rgba(255, 255, 255, 0.1); color: var(--text-muted); }
-
     .btn-excluir { background-color: var(--loss); color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; cursor: pointer; opacity: 1; font-family: 'JetBrains Mono', monospace; }
 
     @media (max-width: 768px) {
       header { padding: 1.75rem 0 1.5rem; }
       .summary-container, .container, .chart-container { width: 92%; }
       .container { grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+      
+      /* No celular, os dois primeiros cards ficam na 1ª linha e o WINRATE ocupa a linha de baixo inteira */
       .summary-container { grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
+      .summary-card:nth-child(3) { grid-column: span 2; }
+      
       .summary-card { padding: 1.2rem 1rem; }
       .summary-card h3 { font-size: 0.72rem; }
       .summary-card p { font-size: 1.3rem; }
@@ -168,12 +153,23 @@
 
   <div class="summary-container">
     <div class="summary-card">
-      <h3>Capital Inicial</h3>
+      <h3>
+        Capital Inicial 
+        <!-- Ícone de Lápis para Edição -->
+        <span class="btn-editar" onclick="editarCapital()" title="Editar Capital Inicial">
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/></svg>
+        </span>
+      </h3>
       <p id="valCapitalInicial">Carregando...</p>
     </div>
     <div class="summary-card">
       <h3>Capital Atual</h3>
       <p id="valCapitalAtual">Carregando...</p>
+    </div>
+    <!-- NOVO CARD: WINRATE -->
+    <div class="summary-card">
+      <h3>Winrate</h3>
+      <p id="valWinrate" class="profit-text">Carregando...</p>
     </div>
   </div>
 
@@ -225,6 +221,7 @@
     document.getElementById('inputData').valueAsDate = new Date();
     
     let meuGrafico = null;
+    let capitalInicialMemoria = 0; // Guarda o valor para usar no popup de edição
 
     async function carregarDashboard() {
       try {
@@ -233,6 +230,7 @@
 
         const capitalInicial = parseFloat(json.capitalInicial) || 0;
         const capitalAtual = parseFloat(json.capitalAtual) || 0;
+        capitalInicialMemoria = capitalInicial;
 
         document.getElementById('valCapitalInicial').innerText = `$ ${capitalInicial.toFixed(2)}`;
         const elCapitalAtual = document.getElementById('valCapitalAtual');
@@ -241,9 +239,22 @@
         if (capitalAtual > capitalInicial) elCapitalAtual.classList.add('profit-text');
         else elCapitalAtual.classList.remove('profit-text');
 
+        // CALCULAR O WINRATE
+        let totalOperacoes = 0;
+        let vitorias = 0;
+        json.registros.forEach(r => {
+          const resultado = parseFloat(r.RESULTADO);
+          if (!isNaN(resultado) && resultado !== 0) { // Ignora resultados exatos zerados
+            totalOperacoes++;
+            if (resultado > 0) vitorias++;
+          }
+        });
+        const winrateValor = totalOperacoes > 0 ? ((vitorias / totalOperacoes) * 100).toFixed(1) : '0.0';
+        document.getElementById('valWinrate').innerText = `${winrateValor}%`;
+
+        // PREENCHER TABELA
         const corpoTabela = document.getElementById('tabelaDados');
         corpoTabela.innerHTML = '';
-        
         const registrosInvertidos = [...json.registros].reverse();
 
         registrosInvertidos.forEach(linha => {
@@ -251,7 +262,6 @@
           const operacao = linha.OPERAÇÃO || '---';
           const lote = linha.LOTE || 0;
           const ptsNum = parseFloat(linha.PTS || 0);
-
           let resultadoNum = parseFloat(linha.RESULTADO);
           if (isNaN(resultadoNum)) resultadoNum = 0;
 
@@ -278,6 +288,7 @@
           corpoTabela.appendChild(tr);
         });
 
+        // ATUALIZAR GRÁFICO
         const registrosGrafico = json.registros.slice(-20);
         const labelsGrafico = registrosGrafico.map(r => `OP #${r.OP}`);
         const dadosGrafico = registrosGrafico.map(r => parseFloat(r.RESULTADO) || 0);
@@ -295,56 +306,49 @@
           const ctx = document.getElementById('graficoPerformance').getContext('2d');
           meuGrafico = new Chart(ctx, {
             type: 'bar',
-            data: {
-              labels: labelsGrafico,
-              datasets: [{
-                label: 'Resultado (R$)',
-                data: dadosGrafico,
-                backgroundColor: coresFundo,
-                borderColor: coresBorda,
-                borderWidth: 1,
-                borderRadius: 4
-              }]
-            },
+            data: { labels: labelsGrafico, datasets: [{ label: 'Resultado (R$)', data: dadosGrafico, backgroundColor: coresFundo, borderColor: coresBorda, borderWidth: 1, borderRadius: 4 }] },
             options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                legend: { display: false },
-                tooltip: { 
-                  titleFont: { family: "'JetBrains Mono', monospace" }, 
-                  bodyFont: { family: "'JetBrains Mono', monospace" },
-                  // NOVO: Formata o balão para exibir 2 casas decimais
-                  callbacks: {
-                    label: function(context) {
-                      return 'Resultado (R$): ' + context.parsed.y.toFixed(2);
-                    }
-                  }
-                }
-              },
-              scales: {
-                y: {
-                  grid: { color: 'rgba(255, 255, 255, 0.05)' },
-                  ticks: { 
-                    color: '#94a3b8', 
-                    font: { family: "'JetBrains Mono', monospace" },
-                    // NOVO: Garante 2 casas no eixo vertical do gráfico também
-                    callback: function(value) {
-                      return value.toFixed(2);
-                    }
-                  }
-                },
-                x: {
-                  grid: { display: false },
-                  ticks: { color: '#94a3b8', font: { family: "'JetBrains Mono', monospace" } }
-                }
-              }
+              responsive: true, maintainAspectRatio: false,
+              plugins: { legend: { display: false }, tooltip: { titleFont: { family: "'JetBrains Mono', monospace" }, bodyFont: { family: "'JetBrains Mono', monospace" }, callbacks: { label: function(context) { return 'Resultado (R$): ' + context.parsed.y.toFixed(2); } } } },
+              scales: { y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8', font: { family: "'JetBrains Mono', monospace" }, callback: function(value) { return value.toFixed(2); } } }, x: { grid: { display: false }, ticks: { color: '#94a3b8', font: { family: "'JetBrains Mono', monospace" } } } }
             }
           });
         }
 
       } catch (erro) {
         document.getElementById('tabelaDados').innerHTML = '<tr><td colspan="7" style="text-align:center;">Erro ao carregar dados.</td></tr>';
+      }
+    }
+
+    // ===== FUNÇÃO PARA EDITAR CAPITAL INICIAL =====
+    async function editarCapital() {
+      const valorDigitado = prompt("Digite o novo Capital Inicial (Ex: 250.50):", capitalInicialMemoria);
+      
+      // Se clicou em cancelar ou deixou vazio
+      if (valorDigitado === null || valorDigitado.trim() === '') return;
+      
+      // Converte vírgula para ponto caso o usuário tenha digitado estilo PT-BR
+      const valorFormatado = parseFloat(valorDigitado.replace(',', '.'));
+      
+      if (isNaN(valorFormatado)) {
+        alert("Por favor, digite um número válido.");
+        return;
+      }
+
+      document.getElementById('valCapitalInicial').innerText = "Atualizando...";
+
+      try {
+        await fetch(API_URL, {
+          method: 'POST',
+          body: JSON.stringify({ action: 'updateCapital', valor: valorFormatado }),
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+        });
+        
+        // Aguarda a planilha computar as fórmulas do "Capital Atual" e recarrega a página
+        setTimeout(async () => { await carregarDashboard(); }, 1000);
+      } catch (erro) {
+        alert('Erro ao atualizar o capital inicial.');
+        carregarDashboard(); // Recarrega para voltar o número original em caso de erro
       }
     }
 
@@ -356,11 +360,7 @@
       botaoElemento.disabled = true;
 
       try {
-        await fetch(API_URL, {
-          method: 'POST',
-          body: JSON.stringify({ action: 'delete', op: op }),
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' }
-        });
+        await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'delete', op: op }), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
         setTimeout(async () => { await carregarDashboard(); }, 800);
       } catch (erro) {
         alert('Erro de comunicação. Não foi possível excluir.');
@@ -374,25 +374,11 @@
       const botao = document.getElementById('btnSalvar');
       botao.innerText = 'ENVIANDO...';
 
-      const dadosForm = {
-        action: 'insert',
-        data: document.getElementById('inputData').value,
-        operacao: document.getElementById('inputOperacao').value,
-        lote: document.getElementById('inputLote').value,
-        pts: document.getElementById('inputPts').value
-      };
+      const dadosForm = { action: 'insert', data: document.getElementById('inputData').value, operacao: document.getElementById('inputOperacao').value, lote: document.getElementById('inputLote').value, pts: document.getElementById('inputPts').value };
 
       try {
-        await fetch(API_URL, {
-          method: 'POST',
-          body: JSON.stringify(dadosForm),
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' }
-        });
-        setTimeout(async () => {
-          await carregarDashboard();
-          botao.innerText = 'Registrar Operação';
-          document.getElementById('inputPts').value = '';
-        }, 1000);
+        await fetch(API_URL, { method: 'POST', body: JSON.stringify(dadosForm), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
+        setTimeout(async () => { await carregarDashboard(); botao.innerText = 'Registrar Operação'; document.getElementById('inputPts').value = ''; }, 1000);
       } catch (erro) {
         alert('Houve um erro ao enviar.');
         botao.innerText = 'Registrar Operação';
